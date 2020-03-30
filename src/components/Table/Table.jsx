@@ -20,15 +20,34 @@ class Table extends Component {
     this.state = {
       page: 1,
       itemPerPage: 4,
-      students: students
+      students,
     };
-    // this.getVisibleStudents = this.getVisibleStudents.bind(this);
   }
 
   getVisibleStudents() {
+    const pages = Math.ceil(this.state.students.length / this.state.itemPerPage);
+    if (this.state.page > pages) {
+      this.setState({ page: pages });
+    }
     const start = (this.state.page - 1) * this.state.itemPerPage;
     const end = start + this.state.itemPerPage;
     return students.slice(start, end);
+  }
+
+  updateItemsPerPage = (num) => {
+    this.setState({ itemPerPage: +num });
+  }
+
+  getNextPage = (state) => {
+    if (Math.ceil(state.students.length / state.itemPerPage) > state.page) {
+      this.setState({ page: state.page + 1 });
+    }
+  }
+
+  getPrevPage = (state) => {
+    if (state.page > 1) {
+      this.setState({ page: state.page - 1 });
+    }
   }
 
   render() {
@@ -53,7 +72,14 @@ class Table extends Component {
             {visibleStudents}
           </tbody>
         </table>
-        <Pagination />
+        <Pagination
+          parentState={this.state}
+          getNextPage={this.getNextPage}
+          getPrevPage={this.getPrevPage}
+          updateItemsPerPage={this.updateItemsPerPage}
+          page={this.state.page}
+          pages={Math.ceil(this.state.students.length / this.state.itemPerPage)}
+        />
       </div>
     );
   }
