@@ -1,3 +1,23 @@
 .main {
     display: block;
 }
+
+.main table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.main tr {
+    border-bottom: 1px solid #b8b8b8;
+}
+
+.main th,
+.main td {
+    text-align: left;
+    padding: 16px;
+}
+
+.main th:first-child,
+.main td:first-child {
+    text-align: left;
+}

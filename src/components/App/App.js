@@ -7,7 +7,7 @@ function App() {
   return (
     <div className={styles.main}>
       <Table />
-      <Button>Test</Button>
+      <Button>Next</Button>
     </div>
   );
 }
