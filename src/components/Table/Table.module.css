@@ -2,22 +2,17 @@
     display: block;
 }
 
-.main table {
+.stTable {
     border-collapse: collapse;
     width: 100%;
 }
 
-.main tr {
+.stTable tr {
     border-bottom: 1px solid #b8b8b8;
 }
 
-.main th,
-.main td {
+.stTable th,
+.stTable td {
     text-align: left;
     padding: 16px;
-}
-
-.main th:first-child,
-.main td:first-child {
-    text-align: left;
 }

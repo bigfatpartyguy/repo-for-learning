@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styles from './Table.module.css';
+import Pagination from '../Pagination/Pagination';
 
 const students = [
   { firstName: 'John', secondName: 'Johnson', birthYear: 1978 },
@@ -10,6 +11,7 @@ const students = [
   { firstName: 'Dennis', secondName: 'Schulz', birthYear: 1973 },
   { firstName: 'Kasey', secondName: 'Neistat', birthYear: 1987 },
   { firstName: 'Glenna', secondName: 'Reichert', birthYear: 2005 },
+  { firstName: 'Glenna', secondName: 'Reichert', birthYear: 2005 },
 ];
 
 class Table extends Component {
@@ -17,13 +19,20 @@ class Table extends Component {
     super(props);
     this.state = {
       page: 1,
-      itemPerPage: 2,
-      visibleStudents: students,
+      itemPerPage: 4,
+      students: students
     };
+    // this.getVisibleStudents = this.getVisibleStudents.bind(this);
+  }
+
+  getVisibleStudents() {
+    const start = (this.state.page - 1) * this.state.itemPerPage;
+    const end = start + this.state.itemPerPage;
+    return students.slice(start, end);
   }
 
   render() {
-    const visibleStudents = this.state.visibleStudents.map(st => (
+    const visibleStudents = this.getVisibleStudents().map(st => (
       <tr>
         <td>{st.firstName}</td>
         <td>{st.secondName}</td>
@@ -32,7 +41,7 @@ class Table extends Component {
     ));
     return (
       <div className={styles.main}>
-        <table>
+        <table className={styles.stTable}>
           <thead>
             <tr>
               <th>First Name</th>
@@ -44,6 +53,7 @@ class Table extends Component {
             {visibleStudents}
           </tbody>
         </table>
+        <Pagination />
       </div>
     );
   }
