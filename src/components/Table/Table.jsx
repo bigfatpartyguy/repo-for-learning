@@ -34,6 +34,10 @@ class Table extends Component {
     return students.slice(start, end);
   }
 
+  handleSelectChange = (event) => {
+    this.setState({ itemPerPage: +event.target.value });
+  }
+
   updateItemsPerPage = (num) => {
     this.setState({ itemPerPage: +num });
   }
@@ -52,7 +56,7 @@ class Table extends Component {
 
   render() {
     const visibleStudents = this.getVisibleStudents().map(st => (
-      <tr>
+      <tr key={`${st.secondName}${st.birthYear}`}>
         <td>{st.firstName}</td>
         <td>{st.secondName}</td>
         <td>{st.birthYear}</td>
@@ -76,9 +80,10 @@ class Table extends Component {
           parentState={this.state}
           getNextPage={this.getNextPage}
           getPrevPage={this.getPrevPage}
-          updateItemsPerPage={this.updateItemsPerPage}
           page={this.state.page}
           pages={Math.ceil(this.state.students.length / this.state.itemPerPage)}
+          handleSelectChange={this.handleSelectChange}
+          selectValue={this.state.itemPerPage}
         />
       </div>
     );
