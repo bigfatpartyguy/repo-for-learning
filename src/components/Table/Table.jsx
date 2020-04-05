@@ -43,16 +43,38 @@ class Table extends Component {
     ));
   };
 
-  updatePages = () => {
-    this.setState((state, props) => {
-      const pages = calcPages(props.students.length, state.itemPerPage);
-      return { pages };
-    });
-  };
-
   handleSelectChange = (event) => {
-    this.setState({ itemPerPage: +event.target.value });
-    this.updatePages();
+    event.persist();
+    this.setState((state, props) => {
+      const itemPerPage = +event.target.value;
+      const pages = calcPages(props.students.length, itemPerPage);
+      let { page } = state;
+      if (page > pages) {
+        page = pages;
+      }
+      if (page > 1 && page < pages) {
+        return {
+          itemPerPage,
+          pages,
+          page,
+          nextBtnDisabled: false,
+          prevBtnDisabled: false,
+        };
+      } else if (page === pages && page > 1) {
+        return {
+          itemPerPage,
+          pages,
+          page,
+          nextBtnDisabled: true,
+          prevBtnDisabled: false,
+        };
+      }
+      return {
+        itemPerPage,
+        pages,
+        page,
+      };
+    });
   };
 
   handleNextClick = () => {
@@ -61,6 +83,7 @@ class Table extends Component {
         return {
           page: state.page + 1,
           nextBtnDisabled: true,
+          prevBtnDisabled: false,
         };
       }
       return {
@@ -76,6 +99,7 @@ class Table extends Component {
         return {
           page: state.page - 1,
           prevBtnDisabled: true,
+          nextBtnDisabled: false,
         };
       }
       return {
