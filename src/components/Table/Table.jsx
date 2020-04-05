@@ -1,18 +1,6 @@
-import React, { Component } from 'react';
-import styles from './Table.module.css';
-import Pagination from '../Pagination/Pagination';
-
-const students = [
-  { firstName: 'John', secondName: 'Johnson', birthYear: 1978 },
-  { firstName: 'Leanne', secondName: 'Graham', birthYear: 1988 },
-  { firstName: 'Ervin', secondName: 'Howell', birthYear: 1956 },
-  { firstName: 'Bauch', secondName: 'Clementine', birthYear: 2002 },
-  { firstName: 'Patricia', secondName: 'Labsak', birthYear: 1997 },
-  { firstName: 'Dennis', secondName: 'Schulz', birthYear: 1973 },
-  { firstName: 'Kasey', secondName: 'Neistat', birthYear: 1987 },
-  { firstName: 'Glenna', secondName: 'Reichert', birthYear: 2005 },
-  { firstName: 'Glenna', secondName: 'Reichert', birthYear: 2005 },
-];
+import React, { Component } from "react";
+import styles from "./Table.module.css";
+import Pagination from "../Pagination/Pagination";
 
 class Table extends Component {
   constructor(props) {
@@ -20,48 +8,84 @@ class Table extends Component {
     this.state = {
       page: 1,
       itemPerPage: 4,
-      students,
+      pages: 0,
+      nextBtnDisabled: true,
+      prevBtnDisabled: true,
     };
   }
 
+  componentDidMount = () => {
+    this.setState((state, props) => {
+      const pages = calcPages(props.students.length, state.itemPerPage);
+      if (pages > state.page) {
+        return {
+          pages,
+          nextBtnDisabled: false,
+        };
+      }
+      return { pages };
+    });
+  };
+
   getVisibleStudents() {
-    const pages = Math.ceil(this.state.students.length / this.state.itemPerPage);
-    if (this.state.page > pages) {
-      this.setState({ page: pages });
-    }
     const start = (this.state.page - 1) * this.state.itemPerPage;
     const end = start + this.state.itemPerPage;
-    return students.slice(start, end);
+    return this.props.students.slice(start, end);
   }
 
-  handleSelectChange = (event) => {
-    this.setState({ itemPerPage: +event.target.value });
-  }
-
-  updateItemsPerPage = (num) => {
-    this.setState({ itemPerPage: +num });
-  }
-
-  getNextPage = (state) => {
-    if (Math.ceil(state.students.length / state.itemPerPage) > state.page) {
-      this.setState({ page: state.page + 1 });
-    }
-  }
-
-  getPrevPage = (state) => {
-    if (state.page > 1) {
-      this.setState({ page: state.page - 1 });
-    }
-  }
-
-  render() {
-    const visibleStudents = this.getVisibleStudents().map(st => (
+  renderTableRow = () => {
+    return this.getVisibleStudents().map((st) => (
       <tr key={`${st.secondName}${st.birthYear}`}>
         <td>{st.firstName}</td>
         <td>{st.secondName}</td>
         <td>{st.birthYear}</td>
       </tr>
     ));
+  };
+
+  updatePages = () => {
+    this.setState((state, props) => {
+      const pages = calcPages(props.students.length, state.itemPerPage);
+      return { pages };
+    });
+  };
+
+  handleSelectChange = (event) => {
+    this.setState({ itemPerPage: +event.target.value });
+    this.updatePages();
+  };
+
+  handleNextClick = () => {
+    this.setState((state) => {
+      if (state.pages - state.page === 1) {
+        return {
+          page: state.page + 1,
+          nextBtnDisabled: true,
+        };
+      }
+      return {
+        page: state.page + 1,
+        prevBtnDisabled: false,
+      };
+    });
+  };
+
+  handlePrevClick = () => {
+    this.setState((state) => {
+      if (state.page === 2) {
+        return {
+          page: state.page - 1,
+          prevBtnDisabled: true,
+        };
+      }
+      return {
+        page: state.page - 1,
+        nextBtnDisabled: false,
+      };
+    });
+  };
+
+  render() {
     return (
       <div className={styles.main}>
         <table className={styles.stTable}>
@@ -72,22 +96,25 @@ class Table extends Component {
               <th>Birth Year</th>
             </tr>
           </thead>
-          <tbody>
-            {visibleStudents}
-          </tbody>
+          <tbody>{this.renderTableRow()}</tbody>
         </table>
         <Pagination
-          parentState={this.state}
-          getNextPage={this.getNextPage}
-          getPrevPage={this.getPrevPage}
-          page={this.state.page}
-          pages={Math.ceil(this.state.students.length / this.state.itemPerPage)}
+          handleNextClick={this.handleNextClick}
+          handlePrevClick={this.handlePrevClick}
           handleSelectChange={this.handleSelectChange}
           selectValue={this.state.itemPerPage}
+          nextBtnDisabled={this.state.nextBtnDisabled}
+          prevBtnDisabled={this.state.prevBtnDisabled}
+          page={this.state.page}
+          pages={this.state.pages}
         />
       </div>
     );
   }
+}
+
+function calcPages(rowsInSource, itemsPerPage) {
+  return Math.ceil(rowsInSource / itemsPerPage);
 }
 
 export default Table;

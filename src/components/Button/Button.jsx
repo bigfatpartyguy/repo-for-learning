@@ -1,9 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styles from './Button.module.css';
+import React from "react";
+import PropTypes from "prop-types";
+import styles from "./Button.module.css";
 
 const Button = (props) => (
   <button
+    disabled={props.disabled}
     className={styles.main}
     onClick={props.onClick}
     type="button"
