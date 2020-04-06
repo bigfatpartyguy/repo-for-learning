@@ -1,6 +1,11 @@
-import React, { Component } from "react";
-import styles from "./Table.module.css";
-import Pagination from "../Pagination/Pagination";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import styles from './Table.module.css';
+import Pagination from '../Pagination/Pagination';
+
+function calcPages(rowsInSource, itemsPerPage) {
+  return Math.ceil(rowsInSource / itemsPerPage);
+}
 
 class Table extends Component {
   constructor(props) {
@@ -33,15 +38,13 @@ class Table extends Component {
     return this.props.students.slice(start, end);
   }
 
-  renderTableRow = () => {
-    return this.getVisibleStudents().map((st) => (
-      <tr key={`${st.secondName}${st.birthYear}`}>
-        <td>{st.firstName}</td>
-        <td>{st.secondName}</td>
-        <td>{st.birthYear}</td>
-      </tr>
-    ));
-  };
+  renderTableRow = () => this.getVisibleStudents().map((st) => (
+    <tr key={`${st.secondName}${st.birthYear}`}>
+      <td>{st.firstName}</td>
+      <td>{st.secondName}</td>
+      <td>{st.birthYear}</td>
+    </tr>
+  ));
 
   handleSelectChange = (event) => {
     event.persist();
@@ -60,7 +63,7 @@ class Table extends Component {
           nextBtnDisabled: false,
           prevBtnDisabled: false,
         };
-      } else if (page === pages && page > 1) {
+      } if (page === pages && page > 1) {
         return {
           itemPerPage,
           pages,
@@ -137,8 +140,13 @@ class Table extends Component {
   }
 }
 
-function calcPages(rowsInSource, itemsPerPage) {
-  return Math.ceil(rowsInSource / itemsPerPage);
-}
+Table.propTypes = {
+  students: PropTypes.arrayOf(PropTypes.object),
+};
+
+Table.defaultProps = {
+  students: [],
+
+};
 
 export default Table;

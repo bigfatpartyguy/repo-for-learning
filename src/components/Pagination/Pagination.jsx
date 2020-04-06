@@ -1,7 +1,8 @@
-import React from "react";
-import Button from "../Button/Button";
-import Select from "../Select/Select";
-import styles from "./Pagination.module.css";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Button from '../Button/Button';
+import Select from '../Select/Select';
+import styles from './Pagination.module.css';
 
 export default function Pagination(props) {
   const {
@@ -31,3 +32,25 @@ export default function Pagination(props) {
     </div>
   );
 }
+
+Pagination.propTypes = {
+  handleNextClick: PropTypes.func,
+  handlePrevClick: PropTypes.func,
+  handleSelectChange: PropTypes.func,
+  selectValue: PropTypes.number,
+  nextBtnDisabled: PropTypes.bool,
+  prevBtnDisabled: PropTypes.bool,
+  page: PropTypes.number,
+  pages: PropTypes.number,
+};
+
+Pagination.defaultProps = {
+  handleNextClick: () => {},
+  handlePrevClick: () => {},
+  handleSelectChange: () => {},
+  selectValue: 4,
+  nextBtnDisabled: false,
+  prevBtnDisabled: false,
+  page: 1,
+  pages: 1,
+};
