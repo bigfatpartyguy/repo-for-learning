@@ -137,21 +137,24 @@ class Table extends Component {
             <tr>
               <TableHeaderCell
                 value="firstName"
-                sortFieldName={this.sortFieldName}
+                sortFieldName={this.state.sortFieldName}
+                sortDirectionAsc={this.state.sortDirectionAsc}
                 onClick={this.handleSort}
               >
                 First Name
               </TableHeaderCell>
               <TableHeaderCell
                 value="secondName"
-                sortFieldName={this.sortFieldName}
+                sortFieldName={this.state.sortFieldName}
+                sortDirectionAsc={this.state.sortDirectionAsc}
                 onClick={this.handleSort}
               >
                 Second Name
               </TableHeaderCell>
               <TableHeaderCell
                 value="birthYear"
-                sortFieldName={this.sortFieldName}
+                sortFieldName={this.state.sortFieldName}
+                sortDirectionAsc={this.state.sortDirectionAsc}
                 onClick={this.handleSort}
               >
                 Birth Year

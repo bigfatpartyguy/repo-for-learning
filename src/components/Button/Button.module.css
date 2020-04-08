@@ -30,29 +30,35 @@
 }
 
 .danger {
-  background-color: #ff4e4e;
+  border: 1px solid #e73a3a;
+  color: #e73a3a;
+  background-color: white;
 }
 
 .danger:hover {
-  background-color: #ec4848;
+  background-color: #e73a3a;
   color: white;
 }
 
 .danger:focus,
 .danger:active {
-  background-color: #d64040;
+  background-color: #c03b3b;
   color: white;
 }
 
 .submit {
-  background-color: #a3f09c;
+  border: 1px solid #3e9253;
+  color: #3e9253;
+  background-color: white;
 }
 
 .submit:hover {
-  background-color: #86d87f;
+  background-color: #3e9253;
+  color: white;
 }
 
 .submit:focus,
 .submit:active {
-  background-color: #73c26c;
+  background-color: #2f8544;
+  color: white;
 }

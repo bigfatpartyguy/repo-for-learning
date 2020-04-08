@@ -20,3 +20,12 @@
 .sortBtn:hover .icon {
   opacity: 0.5;
 }
+
+.active .icon {
+  opacity: 1;
+}
+
+.activeDesc .icon {
+  opacity: 1;
+  transform: rotate(0deg);
+}

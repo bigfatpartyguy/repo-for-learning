@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import styles from './Select.module.css';
 
 export default function Select(props) {
   const options = props.options.map((val) => (
@@ -9,7 +10,11 @@ export default function Select(props) {
   ));
 
   return (
-    <select value={props.value} onChange={props.onChange}>
+    <select
+      className={styles.rowsPerPage}
+      value={props.value}
+      onChange={props.onChange}
+    >
       {options}
     </select>
   );
