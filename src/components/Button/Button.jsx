@@ -4,11 +4,15 @@ import styles from './Button.module.css';
 
 export default function Button(props) {
   const {
-    btnRole,
-    text,
-    onClick,
-    disabled,
+    btnRole, text, onClick, disabled,
   } = props;
+  if (btnRole === 'submit') {
+    return (
+      <button className={styles[btnRole]} type="submit">
+        {text}
+      </button>
+    );
+  }
   return (
     <button
       disabled={disabled}

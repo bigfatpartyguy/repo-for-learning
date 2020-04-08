@@ -11,33 +11,13 @@ export default function Pagination(props) {
     value,
     handleNextClick,
     handlePrevClick,
-    handlePageClick,
     page,
     pages,
   } = props;
-  const pagination = Array(pages)
-    .fill(null)
-    .map((empty, index) => {
-      const key = index;
-      let active;
-      if (key + 1 === page) {
-        active = 'active';
-      }
-      return (
-        <Button
-          disabled={active && true}
-          btnRole={active}
-          onClick={handlePageClick}
-          key={key}
-          text={String(index + 1)}
-        />
-      );
-    });
   return (
     <div className={styles.pagination}>
       <Button disabled={page === 1} onClick={handlePrevClick} text="Previous" />
       <Select options={selectOptions} value={value} onChange={onChange} />
-      {pagination}
       <Button disabled={page === pages} onClick={handleNextClick} text="Next" />
     </div>
   );
@@ -48,7 +28,6 @@ Pagination.propTypes = {
   onChange: PropTypes.func,
   handleNextClick: PropTypes.func,
   handlePrevClick: PropTypes.func,
-  handlePageClick: PropTypes.func,
   page: PropTypes.number,
   pages: PropTypes.number,
   value: PropTypes.number,
@@ -59,7 +38,6 @@ Pagination.defaultProps = {
   onChange: () => {},
   handleNextClick: () => {},
   handlePrevClick: () => {},
-  handlePageClick: () => {},
   page: 1,
   pages: 1,
   value: 4,
