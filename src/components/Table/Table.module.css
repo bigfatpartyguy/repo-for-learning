@@ -1,18 +1,10 @@
 .main {
-    display: block;
 }
 
-.stTable {
-    border-collapse: collapse;
-    width: 100%;
+.main tr:last-child {
+  border-bottom: 2px solid #dedede;
 }
 
-.stTable tr {
-    border-bottom: 1px solid #b8b8b8;
-}
-
-.stTable th,
-.stTable td {
-    text-align: left;
-    padding: 16px;
+.emptyRow {
+  height: 54px;
 }

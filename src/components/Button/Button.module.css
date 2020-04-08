@@ -1,18 +1,30 @@
-.main {
-    padding: 0.4em 1em;
-    border-radius: 2px;
-    background-color: transparent;
-    border: none;
-    font-size: 1em;
-    transition: all 0.3s linear;
-    cursor: pointer;
+.primary {
+  background-color: white;
+  border: 1px solid #dee2e6;
+  color: #007bff;
 }
 
-.main:hover {
-    background-color: #e4e4e4;
+.primary:hover {
+  background-color: #e9ecef;
+  color: #035fc2;
 }
 
-.main:active {
-    background-color: #a8a8a8;
-    transition: none;
+.primary:disabled {
+  color: #a3a5a8;
+  cursor: default;
+}
+
+.primary:disabled:hover {
+  background-color: white;
+}
+
+.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.active:disabled {
+  background-color: #007bff;
+  color: white;
+  cursor: default;
 }

@@ -6,51 +6,39 @@ import styles from './Pagination.module.css';
 
 export default function Pagination(props) {
   const {
+    selectOptions,
+    onChange,
+    value,
     handleNextClick,
     handlePrevClick,
-    handleSelectChange,
-    selectValue,
-    nextBtnDisabled,
-    prevBtnDisabled,
     page,
     pages,
   } = props;
   return (
-    <div className={styles.main}>
-      <Button disabled={prevBtnDisabled} onClick={handlePrevClick}>
-        Previous
-      </Button>
-      <Select
-        handleSelectChange={handleSelectChange}
-        rowsPerPageOptions={[2, 4, 6]}
-        selectValue={selectValue}
-      />
-      <p>{`${page} of ${pages}`}</p>
-      <Button disabled={nextBtnDisabled} onClick={handleNextClick}>
-        Next
-      </Button>
+    <div className={styles.pagination}>
+      <Button disabled={page === 1} onClick={handlePrevClick} text="Previous" />
+      <Select options={selectOptions} value={value} onChange={onChange} />
+      <Button disabled={page === pages} onClick={handleNextClick} text="Next" />
     </div>
   );
 }
 
 Pagination.propTypes = {
+  selectOptions: PropTypes.arrayOf(PropTypes.number),
+  onChange: PropTypes.func,
   handleNextClick: PropTypes.func,
   handlePrevClick: PropTypes.func,
-  handleSelectChange: PropTypes.func,
-  selectValue: PropTypes.number,
-  nextBtnDisabled: PropTypes.bool,
-  prevBtnDisabled: PropTypes.bool,
   page: PropTypes.number,
   pages: PropTypes.number,
+  value: PropTypes.number,
 };
 
 Pagination.defaultProps = {
+  selectOptions: [2, 4, 6],
+  onChange: () => {},
   handleNextClick: () => {},
   handlePrevClick: () => {},
-  handleSelectChange: () => {},
-  selectValue: 4,
-  nextBtnDisabled: false,
-  prevBtnDisabled: false,
   page: 1,
   pages: 1,
+  value: 4,
 };
