@@ -8,3 +8,11 @@
 .emptyRow {
   height: 54px;
 }
+
+.sortBtn {
+  cursor: pointer;
+}
+
+.sortBtn:hover {
+  color: #414141;
+}

@@ -6,7 +6,7 @@ import styles from './App.module.css';
 function App() {
   return (
     <div className={styles.app}>
-      <Table studentsData={students} />
+      <Table data={students} />
     </div>
   );
 }

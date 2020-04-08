@@ -1,18 +1,24 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import TableHeaderCell from '../TableHeaderCell/TableHeaderCell';
 import Button from '../Button/Button';
 import SubmitRow from '../SubmitRow/SubmitRow';
 import Pagination from '../Pagination/Pagination';
+import { sortRows } from '../../helpers';
 import styles from './Table.module.css';
 
 class Table extends Component {
   constructor(props) {
     super(props);
-    this.state = {
+    const firstFieldName = Object.keys(this.props.data[0])[0];
+    const initialState = {
       page: 1,
       rowsPerPage: 4,
-      students: this.props.studentsData,
+      sortFieldName: firstFieldName,
+      sortDirectionAsc: true,
+      students: sortRows(this.props.data, firstFieldName, true),
     };
+    this.state = initialState;
   }
 
   handleSelect = (event) => {
@@ -64,6 +70,28 @@ class Table extends Component {
     this.setState({ page });
   };
 
+  handleSort = (value) => {
+    this.setState((state) => {
+      let { sortFieldName, sortDirectionAsc } = state;
+      if (sortFieldName === value) {
+        sortDirectionAsc = !sortDirectionAsc;
+      } else {
+        sortFieldName = value;
+        sortDirectionAsc = true;
+      }
+      const students = sortRows(
+        state.students,
+        sortFieldName,
+        sortDirectionAsc,
+      );
+      return {
+        sortFieldName,
+        sortDirectionAsc,
+        students,
+      };
+    });
+  };
+
   renderTableRows = () => {
     const { page, rowsPerPage, students } = this.state;
     const start = (page - 1) * rowsPerPage;
@@ -107,9 +135,27 @@ class Table extends Component {
         <table className={styles.main}>
           <thead>
             <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Birth Year</th>
+              <TableHeaderCell
+                value="firstName"
+                sortFieldName={this.sortFieldName}
+                onClick={this.handleSort}
+              >
+                First Name
+              </TableHeaderCell>
+              <TableHeaderCell
+                value="secondName"
+                sortFieldName={this.sortFieldName}
+                onClick={this.handleSort}
+              >
+                Second Name
+              </TableHeaderCell>
+              <TableHeaderCell
+                value="birthYear"
+                sortFieldName={this.sortFieldName}
+                onClick={this.handleSort}
+              >
+                Birth Year
+              </TableHeaderCell>
               <th>&nbsp;</th>
             </tr>
           </thead>
@@ -132,7 +178,7 @@ class Table extends Component {
 }
 
 Table.propTypes = {
-  studentsData: PropTypes.arrayOf(
+  data: PropTypes.arrayOf(
     PropTypes.shape({
       firstName: PropTypes.string,
       secondName: PropTypes.string,
@@ -142,7 +188,7 @@ Table.propTypes = {
 };
 
 Table.defaultProps = {
-  studentsData: [
+  data: [
     {
       firstName: 'John',
       secondName: 'Doe',
