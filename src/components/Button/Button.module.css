@@ -1,3 +1,64 @@
-.main {
-    border-radius: 5px;
+.primary {
+  background-color: white;
+  border: 1px solid #dee2e6;
+  color: #007bff;
+}
+
+.primary:hover {
+  background-color: #e9ecef;
+  color: #035fc2;
+}
+
+.primary:disabled {
+  color: #a3a5a8;
+  cursor: default;
+}
+
+.primary:disabled:hover {
+  background-color: white;
+}
+
+.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.active:disabled {
+  background-color: #007bff;
+  color: white;
+  cursor: default;
+}
+
+.danger {
+  border: 1px solid #e73a3a;
+  color: #e73a3a;
+  background-color: white;
+}
+
+.danger:hover {
+  background-color: #e73a3a;
+  color: white;
+}
+
+.danger:focus,
+.danger:active {
+  background-color: #c03b3b;
+  color: white;
+}
+
+.submit {
+  border: 1px solid #3e9253;
+  color: #3e9253;
+  background-color: white;
+}
+
+.submit:hover {
+  background-color: #3e9253;
+  color: white;
+}
+
+.submit:focus,
+.submit:active {
+  background-color: #2f8544;
+  color: white;
 }

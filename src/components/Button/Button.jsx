@@ -2,23 +2,40 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './Button.module.css';
 
-const Button = (props) => (
-  <button
-    className={styles.main}
-    onClick={props.onClick}
-    type="button"
-  >
-    {props.children}
-  </button>
-);
+export default function Button(props) {
+  const {
+    btnRole, text, onClick, disabled,
+  } = props;
+  if (btnRole === 'submit') {
+    return (
+      <button className={styles[btnRole]} type="submit">
+        {text}
+      </button>
+    );
+  }
+  return (
+    <button
+      disabled={disabled}
+      className={styles[btnRole]}
+      type="button"
+      onClick={onClick}
+      value={text}
+    >
+      {text}
+    </button>
+  );
+}
 
 Button.propTypes = {
+  btnRole: PropTypes.string,
+  text: PropTypes.string,
   onClick: PropTypes.func,
-  children: PropTypes.node,
-};
-Button.defaultProps = {
-  onClick: () => {},
-  children: undefined,
+  disabled: PropTypes.bool,
 };
 
-export default Button;
+Button.defaultProps = {
+  btnRole: 'primary',
+  text: 'Button',
+  onClick: () => {},
+  disabled: false,
+};

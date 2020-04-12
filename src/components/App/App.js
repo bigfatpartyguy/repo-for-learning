@@ -1,13 +1,12 @@
 import React from 'react';
-import styles from './App.module.css';
-import Button from '../Button/Button';
 import Table from '../Table/Table';
+import students from '../../Data';
+import styles from './App.module.css';
 
 function App() {
   return (
-    <div className={styles.main}>
-      <Table />
-      <Button>Test</Button>
+    <div className={styles.app}>
+      <Table data={students} />
     </div>
   );
 }
