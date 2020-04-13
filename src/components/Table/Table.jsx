@@ -4,6 +4,7 @@ import TableHeaderCell from '../TableHeaderCell/TableHeaderCell';
 import Button from '../Button/Button';
 import SubmitRow from '../SubmitRow/SubmitRow';
 import Pagination from '../Pagination/Pagination';
+import CommonModal from '../CommonModal/CommonModal';
 import { sortRows } from '../../helpers';
 import styles from './Table.module.css';
 
@@ -17,6 +18,7 @@ class Table extends Component {
       sortFieldName: firstFieldName,
       sortDirectionAsc: true,
       students: sortRows(this.props.data, firstFieldName, true),
+      isOpen: false,
     };
     this.state = initialState;
   }
@@ -70,6 +72,15 @@ class Table extends Component {
     this.setState({ page });
   };
 
+  handleOpenModal = () => {
+    this.setState({ isOpen: true });
+  };
+
+  handleCLoseModal = () => {
+    this.setState({ isOpen: false });
+  };
+
+
   handleSort = (value) => {
     this.setState((state) => {
       let { sortFieldName, sortDirectionAsc } = state;
@@ -107,7 +118,8 @@ class Table extends Component {
             <td>
               <Button
                 text="Delete"
-                onClick={() => this.handleDeleteClick(ind)}
+                // onClick={() => this.handleDeleteClick(ind)}
+                onClick={this.handleOpenModal}
                 btnRole="danger"
               />
             </td>
@@ -175,6 +187,7 @@ class Table extends Component {
           page={this.state.page}
           pages={Math.ceil(this.state.students.length / this.state.rowsPerPage)}
         />
+        <CommonModal showModal={this.state.isOpen} handleCloseModal={this.handleCLoseModal} />
       </div>
     );
   }
