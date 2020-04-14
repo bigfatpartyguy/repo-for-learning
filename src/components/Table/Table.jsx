@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TableHeaderCell from '../TableHeaderCell/TableHeaderCell';
 import Button from '../Button/Button';
-import SubmitRow from '../SubmitRow/SubmitRow';
 import Pagination from '../Pagination/Pagination';
 import CommonModal from '../CommonModal/CommonModal';
 import { sortRows } from '../../helpers';
@@ -62,7 +61,7 @@ class Table extends Component {
     this.idsStorage.add(id);
     newStudent.id = id;
     this.setState((state) => ({ students: [...state.students, newStudent] }));
-    this.handleSort(this.state.sortFieldName);
+    this.handleCloseModal();
   };
 
   handleNextClick = () => {
@@ -97,7 +96,7 @@ class Table extends Component {
     });
   };
 
-  handleCLoseModal = () => {
+  handleCloseModal = () => {
     this.setState({ isOpen: false });
   };
 
@@ -200,10 +199,13 @@ class Table extends Component {
           </thead>
           <tbody>{this.renderTableRows()}</tbody>
         </table>
-        <Button
-          text="Add new entry"
-          onClick={() => this.handleOpenModal('add')}
-        />
+        <div className={styles.newEntryRow}>
+          <Button
+            text="Add new entry"
+            btnRole="submit"
+            onClick={() => this.handleOpenModal('add')}
+          />
+        </div>
         <Pagination
           value={this.state.rowsPerPage}
           onChange={this.handleSelect}
@@ -217,8 +219,9 @@ class Table extends Component {
         <CommonModal
           modalHint={this.state.modalHint}
           showModal={this.state.isOpen}
-          handleCloseModal={this.handleCLoseModal}
+          handleCloseModal={this.handleCloseModal}
           handleDeleteClick={() => this.handleDeleteClick(this.id)}
+          handleAddRow={this.handleSubmitRow}
         />
       </div>
     );

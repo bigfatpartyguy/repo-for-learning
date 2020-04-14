@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styles from './SubmitRow.module.css';
-import Button from '../Button/Button';
 
 export default class SubmitRow extends React.Component {
   constructor(props) {
@@ -65,7 +64,7 @@ export default class SubmitRow extends React.Component {
             onChange={this.handleChange}
           />
         </label>
-        <Button type="submit" btnRole="submit" text="Add" />
+        {this.props.children}
       </form>
     );
   }
@@ -73,10 +72,12 @@ export default class SubmitRow extends React.Component {
 
 SubmitRow.propTypes = {
   onSubmit: PropTypes.func,
+  children: PropTypes.node,
 };
 
 SubmitRow.defaultProps = {
   onSubmit: (event) => {
     event.preventDefault();
   },
+  children: <button type="button">Error</button>,
 };

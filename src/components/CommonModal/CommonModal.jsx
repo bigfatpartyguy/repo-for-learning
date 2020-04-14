@@ -1,17 +1,21 @@
 import React, { Component } from 'react';
-import ReactModal from 'react-modal';
+import PropTypes from 'prop-types';
+import Modal from 'react-modal';
 import SubmitRow from '../SubmitRow/SubmitRow';
 import Button from '../Button/Button';
 import styles from './CommonModal.module.css';
+
+Modal.setAppElement('#root');
+
+/* eslint-disable react/prop-types */
 
 class CommonModal extends Component {
   createChildren = () => {
     const {
       modalHint,
-      showModal,
       handleCloseModal,
       handleDeleteClick,
-      onSubmit,
+      handleAddRow,
     } = this.props;
 
     switch (true) {
@@ -32,10 +36,15 @@ class CommonModal extends Component {
         );
 
       case modalHint === 'add':
-        return <SubmitRow onSubmit={onSubmit} />;
+        return (
+          <SubmitRow onSubmit={handleAddRow}>
+            <Button type="submit" btnRole="submit" text="Add" />
+            <Button text="Cancel" onClick={handleCloseModal} />
+          </SubmitRow>
+        );
 
       case modalHint === 'edit':
-        return <SubmitRow />;
+        return <div>{ /* TODO */ }</div>;
 
       default:
         return null;
@@ -43,16 +52,17 @@ class CommonModal extends Component {
   };
 
   render() {
+    const { showModal, handleCloseModal } = this.props;
     return (
-      <ReactModal
+      <Modal
         className={styles.modal}
         overlayClassName={styles.overlay}
-        isOpen={this.props.showModal}
-        onRequestClose={this.props.handleCloseModal}
+        isOpen={showModal}
+        onRequestClose={handleCloseModal}
         contentLabel="Delete Confirmation Modal"
       >
         {this.createChildren()}
-      </ReactModal>
+      </Modal>
     );
   }
 }
