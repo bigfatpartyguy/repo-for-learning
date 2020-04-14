@@ -46,6 +46,23 @@
   color: white;
 }
 
+.edit {
+  border: 1px solid #eca306;
+  color: #eca306;
+  background-color: white;
+}
+
+.edit:hover {
+  background-color: #eca306;
+  color: black;
+}
+
+.edit:focus,
+.edit:active {
+  background-color: #dd9906;
+  color: black;
+}
+
 .submit {
   border: 1px solid #3e9253;
   color: #3e9253;

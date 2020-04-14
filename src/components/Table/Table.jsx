@@ -19,8 +19,13 @@ class Table extends Component {
       sortDirectionAsc: true,
       students: sortRows(this.props.data, firstFieldName, true),
       isOpen: false,
+      modalHint: '',
     };
     this.state = initialState;
+    this.id = null;
+    this.idsStorage = new Set(
+      initialState.students.map((student) => student.id),
+    );
   }
 
   handleSelect = (event) => {
@@ -31,21 +36,33 @@ class Table extends Component {
     }));
   };
 
-  handleDeleteClick = (index) => {
+  handleDeleteClick = (id) => {
     this.setState((state) => {
-      const students = state.students.filter((row, i) => i !== index);
-      return { students };
+      const students = state.students.filter((row) => row.id !== id);
+      this.idsStorage.delete(id);
+      return {
+        students,
+        isOpen: false,
+      };
     });
   };
 
   handleSubmitRow = (row) => {
-    const { firstName, secondName, birthYear } = row;
+    const newStudent = { ...row };
+    const { firstName, secondName, birthYear } = newStudent;
     if (!firstName || !secondName || !birthYear) {
       // eslint-disable-next-line no-undef, no-alert
       alert('Please, fill in the input fields.');
       return;
     }
-    this.setState((state) => ({ students: [...state.students, row] }));
+    let id = null;
+    do {
+      id = Math.round(Math.random() * 10000);
+    } while (this.idsStorage.has(id));
+    this.idsStorage.add(id);
+    newStudent.id = id;
+    this.setState((state) => ({ students: [...state.students, newStudent] }));
+    this.handleSort(this.state.sortFieldName);
   };
 
   handleNextClick = () => {
@@ -72,14 +89,17 @@ class Table extends Component {
     this.setState({ page });
   };
 
-  handleOpenModal = () => {
-    this.setState({ isOpen: true });
+  handleOpenModal = (modalHint, id) => {
+    this.id = id;
+    this.setState({
+      isOpen: true,
+      modalHint,
+    });
   };
 
   handleCLoseModal = () => {
     this.setState({ isOpen: false });
   };
-
 
   handleSort = (value) => {
     this.setState((state) => {
@@ -108,19 +128,23 @@ class Table extends Component {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const pageToDisplay = students
-      .map((row, ind) => {
-        const id = ind;
+      .map((row) => {
+        const { id } = row;
         return (
-          <tr key={`${id}${row.secondName}${row.birthYear}`}>
+          <tr key={id}>
             <td>{row.firstName}</td>
             <td>{row.secondName}</td>
             <td>{row.birthYear}</td>
             <td>
               <Button
                 text="Delete"
-                // onClick={() => this.handleDeleteClick(ind)}
-                onClick={this.handleOpenModal}
+                onClick={() => this.handleOpenModal('delete', id)}
                 btnRole="danger"
+              />
+              <Button
+                text="Edit"
+                onClick={() => this.handleOpenModal('edit', id)}
+                btnRole="edit"
               />
             </td>
           </tr>
@@ -171,12 +195,15 @@ class Table extends Component {
               >
                 Birth Year
               </TableHeaderCell>
-              <th>&nbsp;</th>
+              <th>Controls</th>
             </tr>
           </thead>
           <tbody>{this.renderTableRows()}</tbody>
         </table>
-        <SubmitRow onSubmit={this.handleSubmitRow} />
+        <Button
+          text="Add new entry"
+          onClick={() => this.handleOpenModal('add')}
+        />
         <Pagination
           value={this.state.rowsPerPage}
           onChange={this.handleSelect}
@@ -187,7 +214,12 @@ class Table extends Component {
           page={this.state.page}
           pages={Math.ceil(this.state.students.length / this.state.rowsPerPage)}
         />
-        <CommonModal showModal={this.state.isOpen} handleCloseModal={this.handleCLoseModal} />
+        <CommonModal
+          modalHint={this.state.modalHint}
+          showModal={this.state.isOpen}
+          handleCloseModal={this.handleCLoseModal}
+          handleDeleteClick={() => this.handleDeleteClick(this.id)}
+        />
       </div>
     );
   }
