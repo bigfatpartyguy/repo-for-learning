@@ -1,14 +1,19 @@
 .main {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  flex-flow: column nowrap;
+  width: 100%;
   padding: 0.5rem;
 }
 
-.main label {
-  width: 25%;
+.buttons {
+  display: flex;
+  justify-content: center;
 }
 
-.main input {
-  width: 100%;
+.buttons button {
+  min-width: 100px;
+}
+
+.buttons button:first-child {
+  margin-right: 1.2rem;
 }

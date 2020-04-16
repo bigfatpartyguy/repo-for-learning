@@ -19,3 +19,15 @@ export default function AddEditModal(props) {
     </CommonModal>
   );
 }
+
+AddEditModal.propTypes = {
+  isOpen: PropTypes.bool,
+  handleAddRow: PropTypes.func,
+  handleCloseModal: PropTypes.func,
+};
+
+AddEditModal.defaultProps = {
+  isOpen: false,
+  handleAddRow: () => {},
+  handleCloseModal: () => {},
+};
