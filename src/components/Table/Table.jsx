@@ -4,7 +4,9 @@ import TableHeaderCell from '../TableHeaderCell/TableHeaderCell';
 import Button from '../Button/Button';
 import Pagination from '../Pagination/Pagination';
 import DeleteModal from '../CommonModal/Modals/DeleteModal';
+import AddEditModal from '../CommonModal/Modals/AddEditModal';
 import { sortRows } from '../../helpers';
+import { v4 as uuidv4 } from 'uuid';
 import styles from './Table.module.css';
 
 class Table extends Component {
@@ -55,12 +57,7 @@ class Table extends Component {
       alert('Please, fill in the input fields.');
       return;
     }
-    let id = null;
-    do {
-      id = Math.round(Math.random() * 10000);
-    } while (this.idsStorage.has(id));
-    this.idsStorage.add(id);
-    newStudent.id = id;
+    newStudent.id = uuidv4();
     this.setState((state) => ({ students: [...state.students, newStudent] }));
     this.handleCloseModal();
   };
@@ -96,6 +93,16 @@ class Table extends Component {
       return {
         modalsOpen,
         studentId: id,
+      };
+    });
+  };
+
+  handleOpenAddModal = () => {
+    this.setState((state) => {
+      const modalsOpen = { ...state.modalsOpen };
+      modalsOpen.add = true;
+      return {
+        modalsOpen,
       };
     });
   };
@@ -221,7 +228,7 @@ class Table extends Component {
           <Button
             text="Add new entry"
             btnRole="submit"
-            onClick={() => this.handleOpenModal('add')}
+            onClick={this.handleOpenAddModal}
           />
         </div>
         <Pagination
@@ -238,6 +245,11 @@ class Table extends Component {
           isOpen={modalsOpen.delete}
           handleCloseModal={this.handleCloseModal}
           handleDeleteClick={this.handleDeleteClick}
+        />
+        <AddEditModal
+          isOpen={modalsOpen.add}
+          handleCloseModal={this.handleCloseModal}
+          handleAddRow={this.handleSubmitRow}
         />
       </div>
     );
