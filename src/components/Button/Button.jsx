@@ -3,14 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './Button.module.css';
 
 export default function Button(props) {
-  const { type, btnRole, text, onClick, disabled } = props;
-  // if (btnRole === 'submit') {
-  //   return (
-  //     <button className={styles[btnRole]} type="submit">
-  //       {text}
-  //     </button>
-  //   );
-  // }
+  const { type, btnRole, text, onClick, disabled, ariaLabel } = props;
   /* eslint-disable react/button-has-type */
   return (
     <button
@@ -19,6 +12,7 @@ export default function Button(props) {
       type={type}
       onClick={onClick}
       value={text}
+      aria-label={ariaLabel}
     >
       {text}
     </button>
@@ -31,6 +25,7 @@ Button.propTypes = {
   text: PropTypes.string,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
+  ariaLabel: PropTypes.string,
 };
 
 Button.defaultProps = {
@@ -39,4 +34,5 @@ Button.defaultProps = {
   text: 'Button',
   onClick: () => {},
   disabled: false,
+  ariaLabel: null,
 };

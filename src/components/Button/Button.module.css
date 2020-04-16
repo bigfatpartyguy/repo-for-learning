@@ -79,3 +79,31 @@
   background-color: #2f8544;
   color: white;
 }
+
+.closeX {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2em;
+  height: 1.2em;
+  padding: 0;
+  background: 0;
+  color: #ccc;
+  overflow: hidden;
+  border: none;
+  font-size: 2.5em;
+  font-family: serif;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: color 0.1s ease-out;
+}
+
+.closeX:hover {
+  transform: none;
+  background: none;
+  color: #f27474;
+}

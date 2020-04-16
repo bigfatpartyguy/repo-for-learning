@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import TableHeaderCell from '../TableHeaderCell/TableHeaderCell';
 import Button from '../Button/Button';
 import Pagination from '../Pagination/Pagination';
-import CommonModal from '../CommonModal/CommonModal';
+import DeleteModal from '../CommonModal/Modals/DeleteModal';
 import { sortRows } from '../../helpers';
 import styles from './Table.module.css';
 
@@ -17,14 +17,14 @@ class Table extends Component {
       sortFieldName: firstFieldName,
       sortDirectionAsc: true,
       students: sortRows(this.props.data, firstFieldName, true),
-      isOpen: false,
-      modalHint: '',
+      modalsOpen: {
+        delete: false,
+        add: false,
+        edit: false,
+      },
+      studentId: null,
     };
     this.state = initialState;
-    this.id = null;
-    this.idsStorage = new Set(
-      initialState.students.map((student) => student.id),
-    );
   }
 
   handleSelect = (event) => {
@@ -35,15 +35,16 @@ class Table extends Component {
     }));
   };
 
-  handleDeleteClick = (id) => {
+  handleDeleteClick = () => {
     this.setState((state) => {
-      const students = state.students.filter((row) => row.id !== id);
-      this.idsStorage.delete(id);
+      const students = state.students.filter(
+        (row) => row.id !== state.studentId,
+      );
       return {
         students,
-        isOpen: false,
       };
     });
+    this.handleCloseModal();
   };
 
   handleSubmitRow = (row) => {
@@ -88,16 +89,25 @@ class Table extends Component {
     this.setState({ page });
   };
 
-  handleOpenModal = (modalHint, id) => {
-    this.id = id;
-    this.setState({
-      isOpen: true,
-      modalHint,
+  handleOpenDeleteModal = (id) => {
+    this.setState((state) => {
+      const modalsOpen = { ...state.modalsOpen };
+      modalsOpen.delete = true;
+      return {
+        modalsOpen,
+        studentId: id,
+      };
     });
   };
 
   handleCloseModal = () => {
-    this.setState({ isOpen: false });
+    this.setState((state) => {
+      const modalsOpen = { ...state.modalsOpen };
+      Object.keys(modalsOpen).forEach((key) => {
+        modalsOpen[key] = false;
+      });
+      return { modalsOpen };
+    });
   };
 
   handleSort = (value) => {
@@ -137,7 +147,7 @@ class Table extends Component {
             <td>
               <Button
                 text="Delete"
-                onClick={() => this.handleOpenModal('delete', id)}
+                onClick={() => this.handleOpenDeleteModal(id)}
                 btnRole="danger"
               />
               <Button
@@ -165,6 +175,14 @@ class Table extends Component {
   };
 
   render() {
+    const {
+      sortFieldName,
+      sortDirectionAsc,
+      rowsPerPage,
+      page,
+      students,
+      modalsOpen,
+    } = this.state;
     return (
       <div>
         <table className={styles.main}>
@@ -172,24 +190,24 @@ class Table extends Component {
             <tr>
               <TableHeaderCell
                 value="firstName"
-                sortFieldName={this.state.sortFieldName}
-                sortDirectionAsc={this.state.sortDirectionAsc}
+                sortFieldName={sortFieldName}
+                sortDirectionAsc={sortDirectionAsc}
                 onClick={this.handleSort}
               >
                 First Name
               </TableHeaderCell>
               <TableHeaderCell
                 value="secondName"
-                sortFieldName={this.state.sortFieldName}
-                sortDirectionAsc={this.state.sortDirectionAsc}
+                sortFieldName={sortFieldName}
+                sortDirectionAsc={sortDirectionAsc}
                 onClick={this.handleSort}
               >
                 Second Name
               </TableHeaderCell>
               <TableHeaderCell
                 value="birthYear"
-                sortFieldName={this.state.sortFieldName}
-                sortDirectionAsc={this.state.sortDirectionAsc}
+                sortFieldName={sortFieldName}
+                sortDirectionAsc={sortDirectionAsc}
                 onClick={this.handleSort}
               >
                 Birth Year
@@ -207,21 +225,19 @@ class Table extends Component {
           />
         </div>
         <Pagination
-          value={this.state.rowsPerPage}
+          value={rowsPerPage}
           onChange={this.handleSelect}
           selectOptions={[2, 4, 6]}
           handleNextClick={this.handleNextClick}
           handlePrevClick={this.handlePrevClick}
           handlePageClick={this.handlePageClick}
-          page={this.state.page}
-          pages={Math.ceil(this.state.students.length / this.state.rowsPerPage)}
+          page={page}
+          pages={Math.ceil(students.length / rowsPerPage)}
         />
-        <CommonModal
-          modalHint={this.state.modalHint}
-          showModal={this.state.isOpen}
+        <DeleteModal
+          isOpen={modalsOpen.delete}
           handleCloseModal={this.handleCloseModal}
-          handleDeleteClick={() => this.handleDeleteClick(this.id)}
-          handleAddRow={this.handleSubmitRow}
+          handleDeleteClick={this.handleDeleteClick}
         />
       </div>
     );
