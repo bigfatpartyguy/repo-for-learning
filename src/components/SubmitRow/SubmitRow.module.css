@@ -2,7 +2,6 @@
   display: flex;
   flex-flow: column nowrap;
   width: 100%;
-  padding: 0.5rem;
 }
 
 .buttons {
@@ -16,4 +15,8 @@
 
 .buttons button:first-child {
   margin-right: 1.2rem;
+}
+
+.datepicker {
+  background-color: red;
 }

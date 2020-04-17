@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import DatePicker from 'react-datepicker';
 import Input from '../Input/Input';
 import styles from './SubmitRow.module.css';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default class SubmitRow extends React.Component {
   constructor(props) {
@@ -9,7 +11,7 @@ export default class SubmitRow extends React.Component {
     this.initialState = {
       firstName: '',
       secondName: '',
-      birthYear: '',
+      birthday: new Date(),
     };
     this.state = this.initialState;
   }
@@ -21,36 +23,50 @@ export default class SubmitRow extends React.Component {
     });
   };
 
+  handleDateChange = (date) => {
+    this.setState({ birthday: date });
+  };
+
   handleSubmit = (event) => {
     event.preventDefault();
     const row = { ...this.state };
-    row.birthYear = +row.birthYear;
+    row.birthday = +row.birthday;
     this.props.onSubmit(row);
     this.setState(this.initialState);
   };
 
   render() {
-    const { firstName, secondName, birthYear } = this.state;
+    const { firstName, secondName, birthday } = this.state;
+    const { placeholder } = this.props;
     return (
       <form className={styles.main} onSubmit={this.handleSubmit}>
         <Input
           text="First Name"
           id="firstName"
+          placeholder={placeholder.firstName}
           value={firstName}
           onChange={this.handleChange}
         />
         <Input
           text="Second Name"
           id="secondName"
+          placeholder={placeholder.secondName}
           value={secondName}
           onChange={this.handleChange}
         />
         <Input
-          text="Birth Year"
-          id="birthYear"
-          value={birthYear}
+          text="Date of birth"
+          id="birthday"
+          placeholder={placeholder.birthday}
           onChange={this.handleChange}
-        />
+        >
+          <DatePicker
+            className={styles.datepicker}
+            selected={birthday}
+            onChange={this.handleDateChange}
+            showYearDropdown
+          />
+        </Input>
         <div className={styles.buttons}>{this.props.children}</div>
       </form>
     );

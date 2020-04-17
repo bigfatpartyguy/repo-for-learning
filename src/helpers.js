@@ -8,4 +8,8 @@ function sortRows(rows, fieldName, directionAsc) {
   return result;
 }
 
-export { sortRows };
+function getStudentById(students, id) {
+  return students.find((student) => student.id === id);
+}
+
+export { sortRows, getStudentById };

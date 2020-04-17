@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { v4 as uuidv4 } from 'uuid';
 import TableHeaderCell from '../TableHeaderCell/TableHeaderCell';
 import Button from '../Button/Button';
 import Pagination from '../Pagination/Pagination';
 import DeleteModal from '../CommonModal/Modals/DeleteModal';
 import AddEditModal from '../CommonModal/Modals/AddEditModal';
-import { sortRows } from '../../helpers';
-import { v4 as uuidv4 } from 'uuid';
+import { sortRows, getStudentById } from '../../helpers';
 import styles from './Table.module.css';
 
 class Table extends Component {
@@ -51,8 +51,8 @@ class Table extends Component {
 
   handleSubmitRow = (row) => {
     const newStudent = { ...row };
-    const { firstName, secondName, birthYear } = newStudent;
-    if (!firstName || !secondName || !birthYear) {
+    const { firstName, secondName, birthday } = newStudent;
+    if (!firstName || !secondName || !birthday) {
       // eslint-disable-next-line no-undef, no-alert
       alert('Please, fill in the input fields.');
       return;
@@ -107,6 +107,17 @@ class Table extends Component {
     });
   };
 
+  handleOpenEditModal = (id) => {
+    this.setState((state) => {
+      const modalsOpen = { ...state.modalsOpen };
+      modalsOpen.edit = true;
+      return {
+        modalsOpen,
+        studentId: id,
+      };
+    });
+  };
+
   handleCloseModal = () => {
     this.setState((state) => {
       const modalsOpen = { ...state.modalsOpen };
@@ -150,7 +161,7 @@ class Table extends Component {
           <tr key={id}>
             <td>{row.firstName}</td>
             <td>{row.secondName}</td>
-            <td>{row.birthYear}</td>
+            <td>{row.birthday}</td>
             <td>
               <Button
                 text="Delete"
@@ -159,7 +170,7 @@ class Table extends Component {
               />
               <Button
                 text="Edit"
-                onClick={() => this.handleOpenModal('edit', id)}
+                onClick={() => this.handleOpenEditModal(id)}
                 btnRole="edit"
               />
             </td>
@@ -189,6 +200,7 @@ class Table extends Component {
       page,
       students,
       modalsOpen,
+      studentId,
     } = this.state;
     return (
       <div>
@@ -212,12 +224,12 @@ class Table extends Component {
                 Second Name
               </TableHeaderCell>
               <TableHeaderCell
-                value="birthYear"
+                value="birthday"
                 sortFieldName={sortFieldName}
                 sortDirectionAsc={sortDirectionAsc}
                 onClick={this.handleSort}
               >
-                Birth Year
+                Date of birth
               </TableHeaderCell>
               <th>Controls</th>
             </tr>
@@ -247,9 +259,12 @@ class Table extends Component {
           handleDeleteClick={this.handleDeleteClick}
         />
         <AddEditModal
-          isOpen={modalsOpen.add}
+          type={modalsOpen.add && 'add'}
+          isOpen={modalsOpen.add || modalsOpen.edit}
           handleCloseModal={this.handleCloseModal}
           handleAddRow={this.handleSubmitRow}
+          handleEditRow={this.handleEditRow}
+          placeholder={modalsOpen.edit && getStudentById(students, studentId)}
         />
       </div>
     );
@@ -261,7 +276,7 @@ Table.propTypes = {
     PropTypes.shape({
       firstName: PropTypes.string,
       secondName: PropTypes.string,
-      birthYear: PropTypes.number,
+      birthday: PropTypes.number,
     }),
   ),
 };
@@ -271,7 +286,7 @@ Table.defaultProps = {
     {
       firstName: 'John',
       secondName: 'Doe',
-      birthYear: 1900,
+      birthday: 1900,
     },
   ],
 };

@@ -3,19 +3,22 @@ import PropTypes from 'prop-types';
 import styles from './Input.module.css';
 
 export default function Input(props) {
-  const { text, id, onChange, value } = props;
+  const { text, id, onChange, value, placeholder, children } = props;
   return (
     <div className={styles.inputComponent}>
       <label htmlFor={id}>{text}</label>
-      <input
-        id={id}
-        type="text"
-        name={id}
-        value={value}
-        onChange={onChange}
-        autoComplete="off"
-        required
-      />
+      {children || (
+        <input
+          id={id}
+          type="text"
+          name={id}
+          value={value}
+          onChange={onChange}
+          autoComplete="off"
+          placeholder={placeholder}
+          required
+        />
+      )}
     </div>
   );
 }
@@ -31,5 +34,5 @@ Input.defaultProps = {
   text: null,
   id: null,
   onChange: () => {},
-  value: null,
+  value: '',
 };

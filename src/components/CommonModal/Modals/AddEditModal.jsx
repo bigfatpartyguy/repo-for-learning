@@ -3,19 +3,34 @@ import PropTypes from 'prop-types';
 import CommonModal from '../CommonModal';
 import Button from '../../Button/Button';
 import SubmitRow from '../../SubmitRow/SubmitRow';
+import styles from './AddEditModal.module.css';
 
 export default function AddEditModal(props) {
-  const { isOpen, handleAddRow, handleCloseModal } = props;
+  const {
+    type,
+    isOpen,
+    handleAddRow,
+    handleEditRow,
+    handleCloseModal,
+    placeholder,
+  } = props;
+  const title = type === 'add' ? 'Add new entry' : 'Edit entry';
   return (
     <CommonModal
       isOpen={isOpen}
       handleCloseModal={handleCloseModal}
-      contentLabel="Add new entry"
+      contentLabel={title}
     >
-      <SubmitRow onSubmit={handleAddRow}>
-        <Button type="submit" btnRole="submit" text="Add" />
-        <Button text="Cancel" onClick={handleCloseModal} />
-      </SubmitRow>
+      <div className={styles.container}>
+        <h2>{title}</h2>
+        <SubmitRow
+          onSubmit={type === 'add' ? handleAddRow : handleEditRow}
+          placeholder={placeholder}
+        >
+          <Button type="submit" btnRole="submit" text="Ok" />
+          <Button text="Cancel" onClick={handleCloseModal} />
+        </SubmitRow>
+      </div>
     </CommonModal>
   );
 }

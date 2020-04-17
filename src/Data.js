@@ -4,62 +4,62 @@ const students = [
   {
     firstName: 'John',
     secondName: 'Johnson',
-    birthYear: 1978,
+    birthday: '02/23/1978',
   },
   {
     firstName: 'Leanne',
     secondName: 'Graham',
-    birthYear: 1988,
+    birthday: '08/14/1988',
   },
   {
     firstName: 'Ervin',
     secondName: 'Howell',
-    birthYear: 1956,
+    birthday: '03/08/1956',
   },
   {
     firstName: 'Bauch',
     secondName: 'Clementine',
-    birthYear: 2002,
+    birthday: '12/29/2002',
   },
   {
     firstName: 'Patricia',
     secondName: 'Labsak',
-    birthYear: 1997,
+    birthday: '01/07/1997',
   },
   {
     firstName: 'Dennis',
     secondName: 'Schulz',
-    birthYear: 1973,
+    birthday: '05/18/1973',
   },
   {
     firstName: 'Kasey',
     secondName: 'Neistat',
-    birthYear: 1987,
+    birthday: '09/03/1987',
   },
   {
     firstName: 'Glenna',
     secondName: 'Reichert',
-    birthYear: 2005,
+    birthday: '10/11/2005',
   },
   {
     firstName: 'Elon',
     secondName: 'Musk',
-    birthYear: 1971,
+    birthday: '04/26/1971',
   },
   {
     firstName: 'Peter',
     secondName: 'Jackson',
-    birthYear: 1964,
+    birthday: '07/30/1964',
   },
   {
     firstName: 'Andrew',
     secondName: 'Stampton',
-    birthYear: 1976,
+    birthday: '03/17/1976',
   },
   {
     firstName: 'Helen',
     secondName: 'Mortensen',
-    birthYear: 1994,
+    birthday: '11/11/1994',
   },
 ];
 
