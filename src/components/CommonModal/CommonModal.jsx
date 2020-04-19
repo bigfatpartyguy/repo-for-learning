@@ -7,7 +7,12 @@ import styles from './CommonModal.module.css';
 Modal.setAppElement('#root');
 
 export default function CommonModal(props) {
-  const { children, isOpen, handleCloseModal, contentLabel } = props;
+  const {
+    children,
+    isOpen,
+    handleCloseModal,
+    contentLabel,
+  } = props;
   return (
     <Modal
       className={styles.modal}

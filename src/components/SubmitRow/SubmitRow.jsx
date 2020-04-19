@@ -1,81 +1,59 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-datepicker';
 import Input from '../Input/Input';
 import styles from './SubmitRow.module.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
-export default class SubmitRow extends React.Component {
-  constructor(props) {
-    super(props);
-    this.initialState = {
-      firstName: '',
-      secondName: '',
-      birthday: new Date(),
-    };
-    this.state = this.initialState;
-  }
+export default function SubmitRow(props) {
+  const { placeholder } = props;
+  const date = placeholder.birthday;
+  const [firstName, setFirstName] = useState('');
+  const [secondName, setSecondName] = useState('');
+  const [birthday, setDate] = useState(date ? new Date(date) : new Date());
 
-  handleChange = (event) => {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value,
-    });
-  };
-
-  handleDateChange = (date) => {
-    this.setState({ birthday: date });
-  };
-
-  handleSubmit = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    const row = { ...this.state };
-    row.birthday = +row.birthday;
-    this.props.onSubmit(row);
-    this.setState(this.initialState);
+    const row = { firstName, secondName, birthday };
+    props.onSubmit(row);
   };
 
-  render() {
-    const { firstName, secondName, birthday } = this.state;
-    const { placeholder } = this.props;
-    return (
-      <form className={styles.main} onSubmit={this.handleSubmit}>
-        <Input
-          text="First Name"
-          id="firstName"
-          placeholder={placeholder.firstName}
-          value={firstName}
-          onChange={this.handleChange}
+  return (
+    <form className={styles.main} onSubmit={handleSubmit}>
+      <Input
+        text="First Name"
+        id="firstName"
+        placeholder={placeholder.firstName}
+        value={firstName}
+        onChange={(event) => setFirstName(event.target.value)}
+      />
+      <Input
+        text="Second Name"
+        id="secondName"
+        placeholder={placeholder.secondName}
+        value={secondName}
+        onChange={(event) => setSecondName(event.target.value)}
+      />
+      <Input text="Date of birth" id="birthday">
+        <DatePicker
+          className={styles.datepicker}
+          selected={birthday}
+          onChange={(event) => setDate(event)}
+          showYearDropdown
         />
-        <Input
-          text="Second Name"
-          id="secondName"
-          placeholder={placeholder.secondName}
-          value={secondName}
-          onChange={this.handleChange}
-        />
-        <Input
-          text="Date of birth"
-          id="birthday"
-          placeholder={placeholder.birthday}
-          onChange={this.handleChange}
-        >
-          <DatePicker
-            className={styles.datepicker}
-            selected={birthday}
-            onChange={this.handleDateChange}
-            showYearDropdown
-          />
-        </Input>
-        <div className={styles.buttons}>{this.props.children}</div>
-      </form>
-    );
-  }
+      </Input>
+      <div className={styles.buttons}>{props.children}</div>
+    </form>
+  );
 }
 
 SubmitRow.propTypes = {
   onSubmit: PropTypes.func,
   children: PropTypes.node,
+  placeholder: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.objectOf(PropTypes.string),
+  ]),
 };
 
 SubmitRow.defaultProps = {
@@ -83,4 +61,5 @@ SubmitRow.defaultProps = {
     event.preventDefault();
   },
   children: <button type="button">Error</button>,
+  placeholder: false,
 };

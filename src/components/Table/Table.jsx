@@ -6,7 +6,7 @@ import Button from '../Button/Button';
 import Pagination from '../Pagination/Pagination';
 import DeleteModal from '../CommonModal/Modals/DeleteModal';
 import AddEditModal from '../CommonModal/Modals/AddEditModal';
-import { sortRows, getStudentById } from '../../helpers';
+import { sortRows, getStudentById, getDateMask } from '../../helpers';
 import styles from './Table.module.css';
 
 class Table extends Component {
@@ -57,8 +57,30 @@ class Table extends Component {
       alert('Please, fill in the input fields.');
       return;
     }
+    newStudent.birthday = new Date(birthday).toISOString();
     newStudent.id = uuidv4();
     this.setState((state) => ({ students: [...state.students, newStudent] }));
+    this.handleCloseModal();
+  };
+
+  handleEditRow = (row) => {
+    const updatedStudent = { ...row };
+    const { firstName, secondName, birthday } = updatedStudent;
+    if (!firstName || !secondName || !birthday) {
+      // eslint-disable-next-line no-undef, no-alert
+      alert('Please, fill in the input fields.');
+      return;
+    }
+    updatedStudent.birthday = new Date(birthday).toISOString();
+    this.setState((state) => {
+      const students = state.students.map((student) => {
+        if (student.id === state.studentId) {
+          return { ...updatedStudent, id: state.studentId };
+        }
+        return student;
+      });
+      return { students };
+    });
     this.handleCloseModal();
   };
 
@@ -161,7 +183,7 @@ class Table extends Component {
           <tr key={id}>
             <td>{row.firstName}</td>
             <td>{row.secondName}</td>
-            <td>{row.birthday}</td>
+            <td>{getDateMask(row.birthday)}</td>
             <td>
               <Button
                 text="Delete"
@@ -276,7 +298,7 @@ Table.propTypes = {
     PropTypes.shape({
       firstName: PropTypes.string,
       secondName: PropTypes.string,
-      birthday: PropTypes.number,
+      birthday: PropTypes.string,
     }),
   ),
 };

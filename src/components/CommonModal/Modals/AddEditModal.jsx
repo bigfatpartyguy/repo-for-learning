@@ -36,13 +36,22 @@ export default function AddEditModal(props) {
 }
 
 AddEditModal.propTypes = {
+  type: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
   isOpen: PropTypes.bool,
   handleAddRow: PropTypes.func,
+  handleEditRow: PropTypes.func,
   handleCloseModal: PropTypes.func,
+  placeholder: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.objectOf(PropTypes.string),
+  ]),
 };
 
 AddEditModal.defaultProps = {
+  type: false,
   isOpen: false,
   handleAddRow: () => {},
+  handleEditRow: () => {},
   handleCloseModal: () => {},
+  placeholder: false,
 };
