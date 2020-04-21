@@ -286,7 +286,7 @@ class Table extends Component {
           handleCloseModal={this.handleCloseModal}
           handleAddRow={this.handleSubmitRow}
           handleEditRow={this.handleEditRow}
-          placeholder={modalsOpen.edit && getStudentById(students, studentId)}
+          currentValues={modalsOpen.edit && getStudentById(students, studentId)}
         />
       </div>
     );

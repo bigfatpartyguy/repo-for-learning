@@ -6,10 +6,10 @@ import styles from './SubmitRow.module.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
 export default function SubmitRow(props) {
-  const { placeholder } = props;
-  const date = placeholder.birthday;
-  const [firstName, setFirstName] = useState('');
-  const [secondName, setSecondName] = useState('');
+  const { currentValues } = props;
+  const date = currentValues.birthday;
+  const [firstName, setFirstName] = useState(currentValues.firstName || '');
+  const [secondName, setSecondName] = useState(currentValues.secondName || '');
   const [birthday, setDate] = useState(date ? new Date(date) : new Date());
 
   const handleSubmit = (event) => {
@@ -23,14 +23,12 @@ export default function SubmitRow(props) {
       <Input
         text="First Name"
         id="firstName"
-        placeholder={placeholder.firstName}
         value={firstName}
         onChange={(event) => setFirstName(event.target.value)}
       />
       <Input
         text="Second Name"
         id="secondName"
-        placeholder={placeholder.secondName}
         value={secondName}
         onChange={(event) => setSecondName(event.target.value)}
       />
@@ -50,7 +48,7 @@ export default function SubmitRow(props) {
 SubmitRow.propTypes = {
   onSubmit: PropTypes.func,
   children: PropTypes.node,
-  placeholder: PropTypes.oneOfType([
+  currentValues: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.objectOf(PropTypes.string),
   ]),
@@ -61,5 +59,5 @@ SubmitRow.defaultProps = {
     event.preventDefault();
   },
   children: <button type="button">Error</button>,
-  placeholder: false,
+  currentValues: false,
 };
