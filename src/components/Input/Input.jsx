@@ -4,12 +4,7 @@ import styles from './Input.module.css';
 
 export default function Input(props) {
   const {
-    text,
-    id,
-    onChange,
-    value,
-    placeholder,
-    children,
+    text, id, onChange, value, children,
   } = props;
   return (
     <div className={styles.inputComponent}>
@@ -22,7 +17,6 @@ export default function Input(props) {
           value={value}
           onChange={onChange}
           autoComplete="off"
-          placeholder={placeholder}
           required
         />
       )}
@@ -35,7 +29,6 @@ Input.propTypes = {
   id: PropTypes.string,
   onChange: PropTypes.func,
   value: PropTypes.string,
-  placeholder: PropTypes.string,
   children: PropTypes.node,
 };
 
@@ -44,6 +37,5 @@ Input.defaultProps = {
   id: null,
   onChange: () => {},
   value: '',
-  placeholder: null,
   children: null,
 };
