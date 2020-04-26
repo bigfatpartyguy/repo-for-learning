@@ -151,6 +151,7 @@ class Table extends Component {
   };
 
   handleSort = (value) => {
+    console.log(value);
     this.setState((state) => {
       let { sortFieldName, sortDirectionAsc } = state;
       if (sortFieldName === value) {
@@ -184,6 +185,7 @@ class Table extends Component {
             <td>{row.firstName}</td>
             <td>{row.secondName}</td>
             <td>{getDateMask(row.birthday)}</td>
+            <td>{row.email}</td>
             <td>
               <Button
                 text="Delete"
@@ -252,6 +254,14 @@ class Table extends Component {
                 onClick={this.handleSort}
               >
                 Date of birth
+              </TableHeaderCell>
+              <TableHeaderCell
+                value="email"
+                sortFieldName={sortFieldName}
+                sortDirectionAsc={sortDirectionAsc}
+                onClick={this.handleSort}
+              >
+                Email
               </TableHeaderCell>
               <th>Controls</th>
             </tr>
