@@ -10,11 +10,12 @@ export default function SubmitRow(props) {
   const date = currentValues.birthday;
   const [firstName, setFirstName] = useState(currentValues.firstName || '');
   const [secondName, setSecondName] = useState(currentValues.secondName || '');
-  const [birthday, setDate] = useState(date ? new Date(date) : new Date());
+  const [email, setEmail] = useState(currentValues.email || '');
+  const [birthday, setDate] = useState(date ? new Date(date) : null);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    const row = { firstName, secondName, birthday };
+    const row = { firstName, secondName, birthday, email };
     props.onSubmit(row);
   };
 
@@ -37,9 +38,19 @@ export default function SubmitRow(props) {
           className={styles.datepicker}
           selected={birthday}
           onChange={(event) => setDate(event)}
+          placeholderText="Click to select a date"
+          showMonthDropdown
           showYearDropdown
+          dropdownMode="select"
         />
       </Input>
+      <Input
+        type="email"
+        text="Email"
+        id="email"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+      />
       <div className={styles.buttons}>{props.children}</div>
     </form>
   );

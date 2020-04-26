@@ -43,6 +43,7 @@ button:hover {
 }
 
 [type='text'],
+[type='email'],
 [type='number'],
 select {
   border: 1px solid #dedede;
@@ -52,6 +53,7 @@ select {
 }
 
 [type='text']:hover,
+[type='email']:hover,
 [type='number']:hover,
 select:hover {
   border: 1px solid #c5c5c5;
@@ -59,6 +61,8 @@ select:hover {
 
 [type='text']:focus,
 [type='text']:active,
+[type='email']:focus,
+[type='email']:active,
 [type='number']:focus,
 [type='number']:active,
 select:focus,

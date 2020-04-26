@@ -151,7 +151,6 @@ class Table extends Component {
   };
 
   handleSort = (value) => {
-    console.log(value);
     this.setState((state) => {
       let { sortFieldName, sortDirectionAsc } = state;
       if (sortFieldName === value) {

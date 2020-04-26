@@ -4,7 +4,7 @@ import styles from './Input.module.css';
 
 export default function Input(props) {
   const {
-    text, id, onChange, value, children,
+    type, text, id, onChange, value, children,
   } = props;
   return (
     <div className={styles.inputComponent}>
@@ -12,7 +12,7 @@ export default function Input(props) {
       {children || (
         <input
           id={id}
-          type="text"
+          type={type}
           name={id}
           value={value}
           onChange={onChange}
@@ -25,6 +25,7 @@ export default function Input(props) {
 }
 
 Input.propTypes = {
+  type: PropTypes.string,
   text: PropTypes.string,
   id: PropTypes.string,
   onChange: PropTypes.func,
@@ -33,6 +34,7 @@ Input.propTypes = {
 };
 
 Input.defaultProps = {
+  type: 'text',
   text: null,
   id: null,
   onChange: () => {},
