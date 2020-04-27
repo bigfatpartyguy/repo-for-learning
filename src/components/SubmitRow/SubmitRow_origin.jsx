@@ -1,63 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-datepicker';
 import Input from '../Input/Input';
 import styles from './SubmitRow.module.css';
 import 'react-datepicker/dist/react-datepicker.css';
-import useFormValidation from './useFormValidation';
-import validateInputs from './validateInputs';
 
 export default function SubmitRow(props) {
   const { currentValues } = props;
   const date = currentValues.birthday;
-  const INITIAL_STATE = {
-    firstName: currentValues.firstName || '',
-    secondName: currentValues.secondName || '',
-    email: currentValues.email || '',
-    birthday: date ? new Date(date) : null,
+  const [firstName, setFirstName] = useState(currentValues.firstName || '');
+  const [secondName, setSecondName] = useState(currentValues.secondName || '');
+  const [email, setEmail] = useState(currentValues.email || '');
+  const [birthday, setDate] = useState(date ? new Date(date) : null);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const row = { firstName, secondName, birthday, email };
+    props.onSubmit(row);
   };
 
-  const {
-    handleSubmit,
-    handleChange,
-    handleBlur,
-    values,
-    errors,
-  } = useFormValidation(INITIAL_STATE, validateInputs);
-
   return (
-    <form
-      className={styles.main}
-      onSubmit={(event) => {
-        handleSubmit(event, props.onSubmit);
-      }}
-    >
+    <form className={styles.main} onSubmit={handleSubmit}>
       <Input
-        error={errors.firstName || null}
         text="First Name"
         id="firstName"
-        value={values.firstName}
-        onChange={handleChange}
-        onBlur={handleBlur}
+        value={firstName}
+        onChange={(event) => setFirstName(event.target.value)}
       />
       <Input
-        error={errors.secondName || null}
         text="Second Name"
         id="secondName"
-        value={values.secondName}
-        onChange={handleChange}
-        onBlur={handleBlur}
+        value={secondName}
+        onChange={(event) => setSecondName(event.target.value)}
       />
       <Input text="Date of birth" id="birthday">
         <DatePicker
           className={styles.datepicker}
-          selected={values.birthday}
-          onChange={(value) => {
-            handleChange({ target: { name: 'birthday', value } });
-          }}
-          onBlur={(value) => {
-            handleBlur({ target: { name: 'birthday', value } });
-          }}
+          selected={birthday}
+          onChange={(event) => setDate(event)}
           placeholderText="Click to select a date"
           showMonthDropdown
           showYearDropdown
@@ -65,13 +45,11 @@ export default function SubmitRow(props) {
         />
       </Input>
       <Input
-        error={errors.email || null}
         type="email"
         text="Email"
         id="email"
-        value={values.email}
-        onChange={handleChange}
-        onBlur={handleBlur}
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
       />
       <div className={styles.buttons}>{props.children}</div>
     </form>
