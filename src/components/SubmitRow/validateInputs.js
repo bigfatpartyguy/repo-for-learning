@@ -6,6 +6,9 @@ const validateInputs = (values) => {
   if (!values.secondName) {
     errors.secondName = true;
   }
+  if (!values.email) {
+    errors.email = true;
+  }
   if (
     values.email &&
     !/^[\w.-]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/.test(values.email)

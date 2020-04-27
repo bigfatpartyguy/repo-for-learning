@@ -17,6 +17,6 @@
   margin-right: 1.2rem;
 }
 
-.datepicker {
-  /* background-color: red; */
+.error {
+  border: 1px solid #ff3636;
 }

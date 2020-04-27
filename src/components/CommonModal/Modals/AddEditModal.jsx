@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import CommonModal from '../CommonModal';
 import Button from '../../Button/Button';
@@ -15,6 +15,8 @@ export default function AddEditModal(props) {
     currentValues,
   } = props;
   const title = type === 'add' ? 'Add new entry' : 'Edit entry';
+  const [disabled, setDisabled] = useState(true);
+
   return (
     <CommonModal
       isOpen={isOpen}
@@ -26,8 +28,14 @@ export default function AddEditModal(props) {
         <SubmitRow
           onSubmit={type === 'add' ? handleAddRow : handleEditRow}
           currentValues={currentValues}
+          setDisabled={setDisabled}
         >
-          <Button type="submit" btnRole="submit" text="Ok" />
+          <Button
+            disabled={disabled}
+            type="submit"
+            btnRole="submit"
+            text="Ok"
+          />
           <Button text="Cancel" onClick={handleCloseModal} />
         </SubmitRow>
       </div>

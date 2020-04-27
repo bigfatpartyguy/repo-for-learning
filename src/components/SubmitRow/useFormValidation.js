@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const useFormValidation = (initialState, validationFunc) => {
+const useFormValidation = (initialState, validationFunc, btnDisableFunc) => {
   const [values, setValues] = useState(initialState);
   const [touched, setTouched] = useState([]);
   const [errors, setErrors] = useState({});
@@ -11,6 +11,15 @@ const useFormValidation = (initialState, validationFunc) => {
       [event.target.name]: event.target.value,
     });
   };
+
+  useEffect(() => {
+    const validationErrors = validationFunc(values);
+    if (Object.keys(validationErrors).length > 0) {
+      btnDisableFunc(true);
+    } else {
+      btnDisableFunc(false);
+    }
+  });
 
   useEffect(() => {
     const validationErrors = validationFunc(values);
@@ -42,7 +51,9 @@ const useFormValidation = (initialState, validationFunc) => {
     onSubmit(submittedData);
   };
 
-  return { values, handleChange, handleBlur, handleSubmit, errors };
+  return {
+    values, handleChange, handleBlur, handleSubmit, errors,
+  };
 };
 
 export default useFormValidation;

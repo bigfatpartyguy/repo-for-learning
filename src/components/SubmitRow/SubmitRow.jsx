@@ -8,7 +8,7 @@ import useFormValidation from './useFormValidation';
 import validateInputs from './validateInputs';
 
 export default function SubmitRow(props) {
-  const { currentValues } = props;
+  const { currentValues, setDisabled } = props;
   const date = currentValues.birthday;
   const INITIAL_STATE = {
     firstName: currentValues.firstName || '',
@@ -23,7 +23,7 @@ export default function SubmitRow(props) {
     handleBlur,
     values,
     errors,
-  } = useFormValidation(INITIAL_STATE, validateInputs);
+  } = useFormValidation(INITIAL_STATE, validateInputs, setDisabled);
 
   return (
     <form
@@ -50,7 +50,7 @@ export default function SubmitRow(props) {
       />
       <Input text="Date of birth" id="birthday">
         <DatePicker
-          className={styles.datepicker}
+          className={errors.birthday && styles.error}
           selected={values.birthday}
           onChange={(value) => {
             handleChange({ target: { name: 'birthday', value } });
@@ -80,6 +80,7 @@ export default function SubmitRow(props) {
 
 SubmitRow.propTypes = {
   onSubmit: PropTypes.func,
+  setDisabled: PropTypes.func,
   children: PropTypes.node,
   currentValues: PropTypes.oneOfType([
     PropTypes.bool,
@@ -91,6 +92,7 @@ SubmitRow.defaultProps = {
   onSubmit: (event) => {
     event.preventDefault();
   },
+  setDisabled: () => {},
   children: <button type="button">Error</button>,
   currentValues: false,
 };

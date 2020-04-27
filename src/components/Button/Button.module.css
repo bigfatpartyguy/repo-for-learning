@@ -80,6 +80,14 @@
   color: white;
 }
 
+.submit:disabled,
+.submit:disabled:hover {
+  background-color: white;
+  border-color: #a3a5a8;
+  color: #a3a5a8;
+  cursor: default;
+}
+
 .closeX {
   position: absolute;
   z-index: 2;
