@@ -43,10 +43,10 @@ const useFormValidation = (initialState, validationFunc, btnDisableFunc) => {
     const validationErrors = validationFunc(values);
 
     if (Object.keys(validationErrors).length > 0) {
-      // eslint-disable-next-line
-      alert('error');
+      setErrors(validationErrors);
       return;
     }
+
     const submittedData = { ...values };
     onSubmit(submittedData);
   };
