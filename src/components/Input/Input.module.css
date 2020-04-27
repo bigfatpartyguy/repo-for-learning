@@ -6,6 +6,8 @@
 }
 
 .inputComponent label {
+  display: flex;
+  justify-content: space-between;
   width: 100%;
   text-align: left;
   font-size: 1rem;
@@ -18,4 +20,8 @@
 
 .error {
   border: 1px solid #ff3636;
+}
+
+.errorMsg {
+  color: #ff3636;
 }

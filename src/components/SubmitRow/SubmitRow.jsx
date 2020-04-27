@@ -33,22 +33,24 @@ export default function SubmitRow(props) {
       }}
     >
       <Input
-        error={errors.firstName || null}
-        text="First Name"
         id="firstName"
+        error={errors.firstName || null}
+        errorMessage={errors.firstName || ''}
+        text="First Name"
         value={values.firstName}
         onChange={handleChange}
         onBlur={handleBlur}
       />
       <Input
-        error={errors.secondName || null}
-        text="Second Name"
         id="secondName"
+        error={errors.secondName || null}
+        errorMessage={errors.secondName || ''}
+        text="Second Name"
         value={values.secondName}
         onChange={handleChange}
         onBlur={handleBlur}
       />
-      <Input text="Date of birth" id="birthday">
+      <Input text="Date of birth" errorMessage={errors.birthday || ''} id="birthday">
         <DatePicker
           className={errors.birthday && styles.error}
           selected={values.birthday}
@@ -65,10 +67,11 @@ export default function SubmitRow(props) {
         />
       </Input>
       <Input
-        error={errors.email || null}
         type="email"
-        text="Email"
         id="email"
+        error={errors.email || null}
+        errorMessage={errors.email || ''}
+        text="Email"
         value={values.email}
         onChange={handleChange}
         onBlur={handleBlur}

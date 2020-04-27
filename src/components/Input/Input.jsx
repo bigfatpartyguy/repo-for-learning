@@ -3,10 +3,23 @@ import PropTypes from 'prop-types';
 import styles from './Input.module.css';
 
 export default function Input(props) {
-  const { error, type, text, id, onChange, onBlur, value, children } = props;
+  const {
+    error,
+    type,
+    text,
+    errorMessage,
+    id,
+    onChange,
+    onBlur,
+    value,
+    children,
+  } = props;
   return (
     <div className={styles.inputComponent}>
-      <label htmlFor={id}>{text}</label>
+      <label className={styles.label} htmlFor={id}>
+        <span>{text}</span>
+        <span className={styles.errorMsg}>{errorMessage}</span>
+      </label>
       {children || (
         <input
           className={error ? styles.error : null}
@@ -27,6 +40,7 @@ export default function Input(props) {
 
 Input.propTypes = {
   error: PropTypes.bool,
+  errorMessage: PropTypes.string,
   type: PropTypes.string,
   text: PropTypes.string,
   id: PropTypes.string,
@@ -38,6 +52,7 @@ Input.propTypes = {
 
 Input.defaultProps = {
   error: false,
+  errorMessage: null,
   type: 'text',
   text: null,
   id: null,

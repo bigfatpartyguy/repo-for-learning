@@ -1,22 +1,22 @@
 const validateInputs = (values) => {
   const errors = {};
   if (!values.firstName) {
-    errors.firstName = true;
+    errors.firstName = 'required';
   }
   if (!values.secondName) {
-    errors.secondName = true;
+    errors.secondName = 'required';
   }
   if (!values.email) {
-    errors.email = true;
+    errors.email = 'required';
   }
   if (
     values.email
     && !/^[\w.-]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$/.test(values.email)
   ) {
-    errors.email = true;
+    errors.email = 'invalid Email';
   }
   if (!values.birthday) {
-    errors.birthday = true;
+    errors.birthday = 'required';
   }
   return errors;
 };
