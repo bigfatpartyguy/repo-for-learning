@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { v4 as uuidv4 } from 'uuid';
 import TableHeaderCell from '../TableHeaderCell/TableHeaderCell';
 import Button from '../Button/Button';
-import SubmitRow from '../SubmitRow/SubmitRow';
 import Pagination from '../Pagination/Pagination';
-import { sortRows } from '../../helpers';
+import DeleteModal from '../CommonModal/Modals/DeleteModal';
+import AddEditModal from '../CommonModal/Modals/AddEditModal';
+import { sortRows, getStudentById, getDateMask } from '../../helpers';
 import styles from './Table.module.css';
 
 class Table extends Component {
@@ -17,6 +19,12 @@ class Table extends Component {
       sortFieldName: firstFieldName,
       sortDirectionAsc: true,
       students: sortRows(this.props.data, firstFieldName, true),
+      modalsOpen: {
+        delete: false,
+        add: false,
+        edit: false,
+      },
+      studentId: null,
     };
     this.state = initialState;
   }
@@ -29,21 +37,51 @@ class Table extends Component {
     }));
   };
 
-  handleDeleteClick = (index) => {
+  handleDeleteClick = () => {
     this.setState((state) => {
-      const students = state.students.filter((row, i) => i !== index);
-      return { students };
+      const students = state.students.filter(
+        (row) => row.id !== state.studentId,
+      );
+      return {
+        students,
+      };
     });
+    this.handleCloseModal();
   };
 
   handleSubmitRow = (row) => {
-    const { firstName, secondName, birthYear } = row;
-    if (!firstName || !secondName || !birthYear) {
+    const newStudent = { ...row };
+    const { firstName, secondName, birthday } = newStudent;
+    if (!firstName || !secondName || !birthday) {
       // eslint-disable-next-line no-undef, no-alert
       alert('Please, fill in the input fields.');
       return;
     }
-    this.setState((state) => ({ students: [...state.students, row] }));
+    newStudent.birthday = new Date(birthday).toISOString();
+    newStudent.id = uuidv4();
+    this.setState((state) => ({ students: [...state.students, newStudent] }));
+    this.handleCloseModal();
+  };
+
+  handleEditRow = (row) => {
+    const updatedStudent = { ...row };
+    const { firstName, secondName, birthday } = updatedStudent;
+    if (!firstName || !secondName || !birthday) {
+      // eslint-disable-next-line no-undef, no-alert
+      alert('Please, fill in the input fields.');
+      return;
+    }
+    updatedStudent.birthday = new Date(birthday).toISOString();
+    this.setState((state) => {
+      const students = state.students.map((student) => {
+        if (student.id === state.studentId) {
+          return { ...updatedStudent, id: state.studentId };
+        }
+        return student;
+      });
+      return { students };
+    });
+    this.handleCloseModal();
   };
 
   handleNextClick = () => {
@@ -68,6 +106,48 @@ class Table extends Component {
   handlePageClick = (event) => {
     const page = +event.target.value;
     this.setState({ page });
+  };
+
+  handleOpenDeleteModal = (id) => {
+    this.setState((state) => {
+      const modalsOpen = { ...state.modalsOpen };
+      modalsOpen.delete = true;
+      return {
+        modalsOpen,
+        studentId: id,
+      };
+    });
+  };
+
+  handleOpenAddModal = () => {
+    this.setState((state) => {
+      const modalsOpen = { ...state.modalsOpen };
+      modalsOpen.add = true;
+      return {
+        modalsOpen,
+      };
+    });
+  };
+
+  handleOpenEditModal = (id) => {
+    this.setState((state) => {
+      const modalsOpen = { ...state.modalsOpen };
+      modalsOpen.edit = true;
+      return {
+        modalsOpen,
+        studentId: id,
+      };
+    });
+  };
+
+  handleCloseModal = () => {
+    this.setState((state) => {
+      const modalsOpen = { ...state.modalsOpen };
+      Object.keys(modalsOpen).forEach((key) => {
+        modalsOpen[key] = false;
+      });
+      return { modalsOpen };
+    });
   };
 
   handleSort = (value) => {
@@ -97,18 +177,24 @@ class Table extends Component {
     const start = (page - 1) * rowsPerPage;
     const end = start + rowsPerPage;
     const pageToDisplay = students
-      .map((row, ind) => {
-        const id = ind;
+      .map((row) => {
+        const { id } = row;
         return (
-          <tr key={`${id}${row.secondName}${row.birthYear}`}>
+          <tr key={id}>
             <td>{row.firstName}</td>
             <td>{row.secondName}</td>
-            <td>{row.birthYear}</td>
+            <td>{getDateMask(row.birthday)}</td>
+            <td>{row.email}</td>
             <td>
               <Button
                 text="Delete"
-                onClick={() => this.handleDeleteClick(ind)}
+                onClick={() => this.handleOpenDeleteModal(id)}
                 btnRole="danger"
+              />
+              <Button
+                text="Edit"
+                onClick={() => this.handleOpenEditModal(id)}
+                btnRole="edit"
               />
             </td>
           </tr>
@@ -130,6 +216,15 @@ class Table extends Component {
   };
 
   render() {
+    const {
+      sortFieldName,
+      sortDirectionAsc,
+      rowsPerPage,
+      page,
+      students,
+      modalsOpen,
+      studentId,
+    } = this.state;
     return (
       <div>
         <table className={styles.main}>
@@ -137,43 +232,70 @@ class Table extends Component {
             <tr>
               <TableHeaderCell
                 value="firstName"
-                sortFieldName={this.state.sortFieldName}
-                sortDirectionAsc={this.state.sortDirectionAsc}
+                sortFieldName={sortFieldName}
+                sortDirectionAsc={sortDirectionAsc}
                 onClick={this.handleSort}
               >
                 First Name
               </TableHeaderCell>
               <TableHeaderCell
                 value="secondName"
-                sortFieldName={this.state.sortFieldName}
-                sortDirectionAsc={this.state.sortDirectionAsc}
+                sortFieldName={sortFieldName}
+                sortDirectionAsc={sortDirectionAsc}
                 onClick={this.handleSort}
               >
                 Second Name
               </TableHeaderCell>
               <TableHeaderCell
-                value="birthYear"
-                sortFieldName={this.state.sortFieldName}
-                sortDirectionAsc={this.state.sortDirectionAsc}
+                value="birthday"
+                sortFieldName={sortFieldName}
+                sortDirectionAsc={sortDirectionAsc}
                 onClick={this.handleSort}
               >
-                Birth Year
+                Date of birth
               </TableHeaderCell>
-              <th>&nbsp;</th>
+              <TableHeaderCell
+                value="email"
+                sortFieldName={sortFieldName}
+                sortDirectionAsc={sortDirectionAsc}
+                onClick={this.handleSort}
+              >
+                Email
+              </TableHeaderCell>
+              <th>Controls</th>
             </tr>
           </thead>
           <tbody>{this.renderTableRows()}</tbody>
         </table>
-        <SubmitRow onSubmit={this.handleSubmitRow} />
+        <div className={styles.newEntryRow}>
+          <Button
+            text="Add new entry"
+            btnRole="submit"
+            onClick={this.handleOpenAddModal}
+          />
+        </div>
         <Pagination
-          value={this.state.rowsPerPage}
+          value={rowsPerPage}
           onChange={this.handleSelect}
           selectOptions={[2, 4, 6]}
           handleNextClick={this.handleNextClick}
           handlePrevClick={this.handlePrevClick}
           handlePageClick={this.handlePageClick}
-          page={this.state.page}
-          pages={Math.ceil(this.state.students.length / this.state.rowsPerPage)}
+          page={page}
+          pages={Math.ceil(students.length / rowsPerPage)}
+        />
+        <DeleteModal
+          isOpen={modalsOpen.delete}
+          handleCloseModal={this.handleCloseModal}
+          handleDeleteClick={this.handleDeleteClick}
+        />
+        <AddEditModal
+          type={modalsOpen.add && 'add'}
+          isOpen={modalsOpen.add || modalsOpen.edit}
+          handleCloseModal={this.handleCloseModal}
+          handleAddRow={this.handleSubmitRow}
+          handleEditRow={this.handleEditRow}
+          currentValues={modalsOpen.edit && getStudentById(students, studentId)}
         />
       </div>
     );
@@ -185,7 +307,7 @@ Table.propTypes = {
     PropTypes.shape({
       firstName: PropTypes.string,
       secondName: PropTypes.string,
-      birthYear: PropTypes.number,
+      birthday: PropTypes.string,
     }),
   ),
 };
@@ -195,7 +317,7 @@ Table.defaultProps = {
     {
       firstName: 'John',
       secondName: 'Doe',
-      birthYear: 1900,
+      birthday: 1900,
     },
   ],
 };

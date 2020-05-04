@@ -1,0 +1,27 @@
+.inputComponent {
+  display: flex;
+  flex-flow: column nowrap;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.inputComponent label {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  text-align: left;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.inputComponent input {
+  width: 100%;
+}
+
+.error {
+  border: 1px solid #ff3636;
+}
+
+.errorMsg {
+  color: #ff3636;
+}

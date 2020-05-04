@@ -1,0 +1,14 @@
+.container {
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.container h4 {
+  margin-bottom: 2rem;
+}
+
+.container button:first-child {
+  margin-right: 1.2rem;
+}

@@ -46,6 +46,23 @@
   color: white;
 }
 
+.edit {
+  border: 1px solid #eca306;
+  color: #eca306;
+  background-color: white;
+}
+
+.edit:hover {
+  background-color: #eca306;
+  color: black;
+}
+
+.edit:focus,
+.edit:active {
+  background-color: #dd9906;
+  color: black;
+}
+
 .submit {
   border: 1px solid #3e9253;
   color: #3e9253;
@@ -61,4 +78,40 @@
 .submit:active {
   background-color: #2f8544;
   color: white;
+}
+
+.submit:disabled,
+.submit:disabled:hover {
+  background-color: white;
+  border-color: #a3a5a8;
+  color: #a3a5a8;
+  cursor: default;
+}
+
+.closeX {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2em;
+  height: 1.2em;
+  padding: 0;
+  background: 0;
+  color: #ccc;
+  overflow: hidden;
+  border: none;
+  font-size: 2.5em;
+  font-family: serif;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: color 0.1s ease-out;
+}
+
+.closeX:hover {
+  transform: none;
+  background: none;
+  color: #f27474;
 }

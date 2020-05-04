@@ -1,82 +1,101 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import DatePicker from 'react-datepicker';
+import Input from '../Input/Input';
 import styles from './SubmitRow.module.css';
-import Button from '../Button/Button';
+import 'react-datepicker/dist/react-datepicker.css';
+import useFormValidation from './useFormValidation';
+import validateInputs from './validateInputs';
 
-export default class SubmitRow extends React.Component {
-  constructor(props) {
-    super(props);
-    this.initialState = {
-      firstName: '',
-      secondName: '',
-      birthYear: '',
-    };
-    this.state = this.initialState;
-  }
-
-  handleChange = (event) => {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value,
-    });
+export default function SubmitRow(props) {
+  const { currentValues, setDisabled } = props;
+  const date = currentValues.birthday;
+  const INITIAL_STATE = {
+    firstName: currentValues.firstName || '',
+    secondName: currentValues.secondName || '',
+    email: currentValues.email || '',
+    birthday: date ? new Date(date) : null,
   };
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-    const row = { ...this.state };
-    row.birthYear = +row.birthYear;
-    this.props.onSubmit(row);
-    this.setState(this.initialState);
-  };
+  const {
+    handleSubmit,
+    handleChange,
+    handleBlur,
+    values,
+    errors,
+  } = useFormValidation(INITIAL_STATE, validateInputs, setDisabled);
 
-  render() {
-    const { firstName, secondName, birthYear } = this.state;
-    return (
-      <form className={styles.main} onSubmit={this.handleSubmit}>
-        <label htmlFor="name">
-          First Name
-          <input
-            id="firstName"
-            type="text"
-            name="firstName"
-            value={firstName}
-            onChange={this.handleChange}
-            required
-          />
-        </label>
-        <label htmlFor="surname">
-          Second Name
-          <input
-            id="secondName"
-            type="text"
-            name="secondName"
-            value={secondName}
-            onChange={this.handleChange}
-            required
-          />
-        </label>
-        <label htmlFor="year">
-          Birth Year
-          <input
-            id="birthYear"
-            type="number"
-            name="birthYear"
-            value={birthYear}
-            onChange={this.handleChange}
-          />
-        </label>
-        <Button btnRole="submit" text="Add" />
-      </form>
-    );
-  }
+  return (
+    <form
+      className={styles.main}
+      onSubmit={(event) => {
+        handleSubmit(event, props.onSubmit);
+      }}
+    >
+      <Input
+        id="firstName"
+        error={errors.firstName || null}
+        errorMessage={errors.firstName || ''}
+        text="First Name"
+        value={values.firstName}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
+      <Input
+        id="secondName"
+        error={errors.secondName || null}
+        errorMessage={errors.secondName || ''}
+        text="Second Name"
+        value={values.secondName}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
+      <Input text="Date of birth" errorMessage={errors.birthday || ''} id="birthday">
+        <DatePicker
+          className={errors.birthday && styles.error}
+          selected={values.birthday}
+          onChange={(value) => {
+            handleChange({ target: { name: 'birthday', value } });
+          }}
+          onBlur={(value) => {
+            handleBlur({ target: { name: 'birthday', value } });
+          }}
+          placeholderText="Click to select a date"
+          showMonthDropdown
+          showYearDropdown
+          dropdownMode="select"
+        />
+      </Input>
+      <Input
+        type="email"
+        id="email"
+        error={errors.email || null}
+        errorMessage={errors.email || ''}
+        text="Email"
+        value={values.email}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
+      <div className={styles.buttons}>{props.children}</div>
+    </form>
+  );
 }
 
 SubmitRow.propTypes = {
   onSubmit: PropTypes.func,
+  setDisabled: PropTypes.func,
+  children: PropTypes.node,
+  currentValues: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.objectOf(PropTypes.string),
+  ]),
 };
 
 SubmitRow.defaultProps = {
   onSubmit: (event) => {
     event.preventDefault();
   },
+  setDisabled: () => {},
+  children: <button type="button">Error</button>,
+  currentValues: false,
 };

@@ -1,14 +1,22 @@
 .main {
   display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 0.5rem;
-}
-
-.main label {
-  width: 25%;
-}
-
-.main input {
+  flex-flow: column nowrap;
   width: 100%;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.buttons button {
+  min-width: 100px;
+}
+
+.buttons button:first-child {
+  margin-right: 1.2rem;
+}
+
+.error {
+  border: 1px solid #ff3636;
 }
